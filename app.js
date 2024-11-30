@@ -17,9 +17,9 @@ app.use(express.json());
 // Routes
 app.use('/auth', authRoutes);
 app.use('/protected', protectedRoutes);
-
+const MONGO_URI=process.env.MONGO_URI
 // Database connection
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Database connected'))
   .catch((err) => console.error('Database connection failed', err));
 
