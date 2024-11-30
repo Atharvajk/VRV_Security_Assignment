@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 require('dotenv').config();
 
+const { logRequest } = require('./middleware/logger');
 const authRoutes = require('./routes/authRoutes');
 const protectedRoutes = require('./routes/protectedRoutes');
 
@@ -13,6 +14,8 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+
+app.use(logRequest); // Log all requests
 
 // Routes
 app.use('/auth', authRoutes);

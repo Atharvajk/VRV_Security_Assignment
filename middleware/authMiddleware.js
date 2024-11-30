@@ -1,8 +1,18 @@
 const { verifyToken } = require('../utils/jwt');
+const { isTokenBlacklisted } = require('./tokenBlacklist');
 
 exports.authenticate = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).json({ message: 'Token required' });
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Token missing or invalid' });
+  }
+
+  const token = authHeader.split(' ')[1];
+
+  if (isTokenBlacklisted(token)) {
+    return res.status(403).json({ message: 'Token has been blacklisted' });
+  }
 
   try {
     const decoded = verifyToken(token);
